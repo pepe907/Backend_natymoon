@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.DireccionUsuarioRequest;
 import com.natymoo.backend.entity.DireccionUsuario;
 import com.natymoo.backend.service.DireccionUsuarioService;
 import jakarta.validation.Valid;
@@ -32,14 +33,14 @@ public class DireccionUsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<DireccionUsuario> crear(@Valid @RequestBody DireccionUsuario direccionUsuario) {
-        DireccionUsuario creado = service.create(direccionUsuario);
+    public ResponseEntity<DireccionUsuario> crear(@Valid @RequestBody DireccionUsuarioRequest direccionUsuarioRequest) {
+        DireccionUsuario creado = service.create(direccionUsuarioRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DireccionUsuario> actualizar(@PathVariable Long id, @Valid @RequestBody DireccionUsuario direccionUsuario) {
-        return ResponseEntity.ok(service.update(id, direccionUsuario));
+    public ResponseEntity<DireccionUsuario> actualizar(@PathVariable Long id, @Valid @RequestBody DireccionUsuarioRequest direccionUsuarioRequest) {
+        return ResponseEntity.ok(service.update(id,direccionUsuarioRequest));
     }
 
     @DeleteMapping("/{id}")
