@@ -25,13 +25,14 @@ public class DireccionUsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontro direccion de usuario con id: " + id));
     }
 
-    public DireccionUsuario create(DireccionUsuario entidad) {
-        return repository.save(entidad);
+    public DireccionUsuario create(DireccionUsuario direccionUsuario) {
+        return repository.save(direccionUsuario);
     }
 
-    public DireccionUsuario update(Long id, DireccionUsuario datosActualizados) {
+    public DireccionUsuario update(Long id, DireccionUsuario direccionUsuario) {
         DireccionUsuario existente = findById(id);
-        copiarCampos(existente, datosActualizados);
+
+        copiarCampos(existente, direccionUsuario);
         return repository.save(existente);
     }
 
@@ -42,11 +43,6 @@ public class DireccionUsuarioService {
         repository.deleteById(id);
     }
 
-    /**
-     * Copia todos los campos del objeto recibido sobre el existente,
-     * preservando el id. Al usar reflexion simple via setters de Lombok
-     * evitamos repetir manualmente cada campo aqui.
-     */
     private void copiarCampos(DireccionUsuario existente, DireccionUsuario nuevo) {
         org.springframework.beans.BeanUtils.copyProperties(nuevo, existente, "id", "fechaCreacion");
     }
