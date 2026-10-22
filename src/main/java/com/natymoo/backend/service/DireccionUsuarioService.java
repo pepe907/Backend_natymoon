@@ -67,10 +67,11 @@ public class DireccionUsuarioService {
 
         if (direccionUsuarioRequest.getPais() != null){
             existente.setPais(direccionUsuarioRequest.getPais());
-        }if (direccionUsuarioRequest.getEsPrincipal() != null){
+        }
+        if (direccionUsuarioRequest.getEsPrincipal() != null){
             existente.setEsPrincipal(direccionUsuarioRequest.getEsPrincipal());
         }
-        
+
         return repository.save(existente);
     }
 
