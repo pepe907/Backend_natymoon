@@ -70,8 +70,6 @@ public class Usuario implements UserDetails {
         this.fechaActualizacion = LocalDateTime.now();
     }
 
-    // ================= UserDetails =================
-
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
