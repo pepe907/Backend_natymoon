@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.UsersRequest;
 import com.natymoo.backend.entity.Usuario;
 import com.natymoo.backend.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para usuario.
- * GET    /api/usuarios       -> listar todos
- * GET    /api/usuarios/{id} -> obtener uno
- * POST   /api/usuarios       -> crear
- * PUT    /api/usuarios/{id} -> actualizar
- * DELETE /api/usuarios/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crear(@Valid @RequestBody Usuario entidad) {
-        Usuario creado = service.create(entidad);
+    public ResponseEntity<Usuario> crear(@Valid @RequestBody UsersRequest usersRequest) {
+        Usuario creado = service.create(usersRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @Valid @RequestBody Usuario users) {
-        return ResponseEntity.ok(service.update(id, users));
+    public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @Valid @RequestBody UsersRequest usersRequest) {
+        return ResponseEntity.ok(service.update(id, usersRequest));
     }
 
     @DeleteMapping("/{id}")
