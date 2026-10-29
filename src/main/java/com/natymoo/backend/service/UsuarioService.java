@@ -36,7 +36,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado com id: 1"));
 
         Usuario users = Usuario.builder()
-                .nombre(usersRequest.getNombre())   
+                .nombre(usersRequest.getNombre())
                 .apellido(usersRequest.getApellido())
                 .email(usersRequest.getEmail())
                 .passwordHash(passwordEncoder.encode(usersRequest.getPassword()))
@@ -47,11 +47,18 @@ public class UsuarioService {
         return usuarioRepository.save(users);
     }
 
-    public Usuario update(Long id, Usuario users) {
+    public Usuario update(Long id, UsersRequest usersRequest) {
         Usuario usuarioExistente = findById(id);
 
-        usuarioExistente.setNombre(users.getNombre());
-        usuarioExistente.setEmail(users.getEmail());
+        usuarioExistente.setNombre(usersRequest.getNombre());
+        usuarioExistente.setApellido(usersRequest.getApellido());
+        usuarioExistente.setEmail(usersRequest.getEmail());
+        usuarioExistente.setTelefono(usuarioExistente.getTelefono());
+
+        if (usersRequest.getPassword() != null && !usersRequest.getPassword().isBlank()){
+            usuarioExistente.setPasswordHash(passwordEncoder.encode(usersRequest.getPassword()));
+        }
+
         return usuarioRepository.save(usuarioExistente);
     }
 
