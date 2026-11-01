@@ -1,5 +1,6 @@
 package com.natymoo.backend.service;
 
+import com.natymoo.backend.dto.RolRequest;
 import com.natymoo.backend.entity.Rol;
 import com.natymoo.backend.exception.ResourceNotFoundException;
 import com.natymoo.backend.repository.RolRepository;
@@ -20,34 +21,30 @@ public class RolService {
         return repository.findAll();
     }
 
-    public Rol findById(Integer id) {
+    public Rol findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontro rol con id: " + id));
     }
 
-    public Rol create(Rol entidad) {
-        return repository.save(entidad);
+    public Rol create(RolRequest rolRequest) {
+        Rol rolCreate = Rol.builder()
+                .descripcion(rolRequest.getDescripcion())
+                .build();
+        return repository.save(rolCreate);
     }
 
-    public Rol update(Integer id, Rol datosActualizados) {
+    public Rol update(Long id, RolRequest rolRequest) {
         Rol existente = findById(id);
-        copiarCampos(existente, datosActualizados);
+
+        existente.setDescripcion(rolRequest.getDescripcion());
         return repository.save(existente);
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("No se encontro rol con id: " + id);
         }
         repository.deleteById(id);
     }
 
-    /**
-     * Copia todos los campos del objeto recibido sobre el existente,
-     * preservando el id. Al usar reflexion simple via setters de Lombok
-     * evitamos repetir manualmente cada campo aqui.
-     */
-    private void copiarCampos(Rol existente, Rol nuevo) {
-        org.springframework.beans.BeanUtils.copyProperties(nuevo, existente, "id");
-    }
 }
