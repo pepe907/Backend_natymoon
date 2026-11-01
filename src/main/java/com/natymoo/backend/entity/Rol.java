@@ -19,5 +19,5 @@ public class Rol {
 
     @NotBlank(message = "El nombre del rol es obligatorio")
     @Column(nullable = false, unique = true, length = 30)
-    private String nombre;
+    private String descripcion;
 }
