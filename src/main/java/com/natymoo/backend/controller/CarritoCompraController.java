@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.CarritoCompraRequest;
 import com.natymoo.backend.entity.CarritoCompra;
 import com.natymoo.backend.service.CarritoCompraService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para carrito de compra.
- * GET    /api/carritos-compra       -> listar todos
- * GET    /api/carritos-compra/{id} -> obtener uno
- * POST   /api/carritos-compra       -> crear
- * PUT    /api/carritos-compra/{id} -> actualizar
- * DELETE /api/carritos-compra/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/carritos-compra")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class CarritoCompraController {
     }
 
     @PostMapping
-    public ResponseEntity<CarritoCompra> crear(@Valid @RequestBody CarritoCompra entidad) {
-        CarritoCompra creado = service.create(entidad);
+    public ResponseEntity<CarritoCompra> crear(@Valid @RequestBody CarritoCompraRequest carritoCompraRequest) {
+        CarritoCompra creado = service.create(carritoCompraRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CarritoCompra> actualizar(@PathVariable Long id, @Valid @RequestBody CarritoCompra entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<CarritoCompra> actualizar(@PathVariable Long id, @Valid @RequestBody CarritoCompraRequest carritoCompraRequest) {
+        return ResponseEntity.ok(service.update(id, carritoCompraRequest));
     }
 
     @DeleteMapping("/{id}")
