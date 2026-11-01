@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.CuponRequest;
 import com.natymoo.backend.entity.Cupon;
 import com.natymoo.backend.service.CuponService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para cupon.
- * GET    /api/cupones       -> listar todos
- * GET    /api/cupones/{id} -> obtener uno
- * POST   /api/cupones       -> crear
- * PUT    /api/cupones/{id} -> actualizar
- * DELETE /api/cupones/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/cupones")
 @RequiredArgsConstructor
@@ -33,23 +27,23 @@ public class CuponController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cupon> obtener(@PathVariable Integer id) {
+    public ResponseEntity<Cupon> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Cupon> crear(@Valid @RequestBody Cupon entidad) {
-        Cupon creado = service.create(entidad);
+    public ResponseEntity<Cupon> crear(@Valid @RequestBody CuponRequest cuponRequest) {
+        Cupon creado = service.create(cuponRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cupon> actualizar(@PathVariable Integer id, @Valid @RequestBody Cupon entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<Cupon> actualizar(@PathVariable Long id, @Valid @RequestBody CuponRequest cuponRequest) {
+        return ResponseEntity.ok(service.update(id, cuponRequest));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
