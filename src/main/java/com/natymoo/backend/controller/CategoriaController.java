@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.CategoriaRequest;
 import com.natymoo.backend.entity.Categoria;
 import com.natymoo.backend.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -11,14 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para categoria.
- * GET    /api/categorias       -> listar todos
- * GET    /api/categorias/{id} -> obtener uno
- * POST   /api/categorias       -> crear
- * PUT    /api/categorias/{id} -> actualizar
- * DELETE /api/categorias/{id} -> eliminar
- */
 @RestController
 @RequestMapping("/api/categorias")
 @RequiredArgsConstructor
@@ -33,23 +26,23 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> obtener(@PathVariable Integer id) {
+    public ResponseEntity<Categoria> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> crear(@Valid @RequestBody Categoria entidad) {
-        Categoria creado = service.create(entidad);
+    public ResponseEntity<Categoria> crear(@Valid @RequestBody CategoriaRequest categoriaRequest) {
+        Categoria creado = service.create(categoriaRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> actualizar(@PathVariable Integer id, @Valid @RequestBody Categoria entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<Categoria> actualizar(@PathVariable Long id, @Valid @RequestBody CategoriaRequest categoriaRequest) {
+        return ResponseEntity.ok(service.update(id, categoriaRequest));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
