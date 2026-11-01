@@ -20,7 +20,7 @@ public class Cupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "El código del cupón es obligatorio")
     @Column(nullable = false, unique = true, length = 30)
