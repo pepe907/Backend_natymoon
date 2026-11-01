@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.RolRequest;
 import com.natymoo.backend.entity.Rol;
 import com.natymoo.backend.service.RolService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para rol.
- * GET    /api/roles       -> listar todos
- * GET    /api/roles/{id} -> obtener uno
- * POST   /api/roles       -> crear
- * PUT    /api/roles/{id} -> actualizar
- * DELETE /api/roles/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
@@ -33,23 +27,23 @@ public class RolController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rol> obtener(@PathVariable Integer id) {
+    public ResponseEntity<Rol> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Rol> crear(@Valid @RequestBody Rol entidad) {
-        Rol creado = service.create(entidad);
+    public ResponseEntity<Rol> crear(@Valid @RequestBody RolRequest rolRequest) {
+        Rol creado = service.create(rolRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Rol> actualizar(@PathVariable Integer id, @Valid @RequestBody Rol entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<Rol> actualizar(@PathVariable Long id, @Valid @RequestBody RolRequest rolRequest) {
+        return ResponseEntity.ok(service.update(id, rolRequest));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
