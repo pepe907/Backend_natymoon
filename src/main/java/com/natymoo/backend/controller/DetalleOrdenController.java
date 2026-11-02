@@ -11,14 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para detalle de orden.
- * GET    /api/detalle-orden       -> listar todos
- * GET    /api/detalle-orden/{id} -> obtener uno
- * POST   /api/detalle-orden       -> crear
- * PUT    /api/detalle-orden/{id} -> actualizar
- * DELETE /api/detalle-orden/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/detalle-orden")
 @RequiredArgsConstructor
