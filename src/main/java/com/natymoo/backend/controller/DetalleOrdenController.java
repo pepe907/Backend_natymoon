@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.DetalleOrdenRequest;
 import com.natymoo.backend.entity.DetalleOrden;
 import com.natymoo.backend.service.DetalleOrdenService;
 import jakarta.validation.Valid;
@@ -31,14 +32,14 @@ public class DetalleOrdenController {
     }
 
     @PostMapping
-    public ResponseEntity<DetalleOrden> crear(@Valid @RequestBody DetalleOrden entidad) {
-        DetalleOrden creado = service.create(entidad);
+    public ResponseEntity<DetalleOrden> crear(@Valid @RequestBody DetalleOrdenRequest detalleOrdenRequest) {
+        DetalleOrden creado = service.create(detalleOrdenRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DetalleOrden> actualizar(@PathVariable Long id, @Valid @RequestBody DetalleOrden entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<DetalleOrden> actualizar(@PathVariable Long id, @Valid @RequestBody DetalleOrdenRequest detalleOrdenRequest) {
+        return ResponseEntity.ok(service.update(id, detalleOrdenRequest));
     }
 
     @DeleteMapping("/{id}")
