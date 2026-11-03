@@ -3,13 +3,11 @@ services:
     image: postgres:15-alpine
     container_name: Proyecto
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: agustin07
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
 
 volumes:
   pgdata:
