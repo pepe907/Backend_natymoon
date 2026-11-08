@@ -37,18 +37,16 @@ public class AuthController {
     private final CookieUtil cookieUtil;
     private final AuthenticationManager authenticationManager;
 
-    @Operation(summary = "Registrar usuario",
-            description = "Crea un usuario nuevo con rol USER, inicia sesión automáticamente y setea la cookie del JWT.")
+    @Operation(summary = "Registrar usuario", description = "Crea un usuario nuevo con rol USER, inicia sesión automáticamente y setea la cookie del JWT.")
     @PostMapping("/register")
-    public ResponseEntity<UsuarioResponse> register(@Valid @RequestBody RegisterRequest request,
-                                                      HttpServletResponse response) {
+    public ResponseEntity<UsuarioResponse> register(@Valid @RequestBody RegisterRequest request, HttpServletResponse response) {
 
         if (usuarioRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Ya existe una cuenta con ese email");
         }
 
         Rol rolUser = rolRepository.findAll().stream()
-                .filter(r -> r.getNombre().equalsIgnoreCase("USER"))
+                .filter(r -> r.getDescripcion().equalsIgnoreCase("USER"))
                 .findFirst()
                 .orElseThrow(() -> new BadRequestException("El rol USER no existe. Ejecuta el seed de roles."));
 
@@ -64,15 +62,13 @@ public class AuthController {
 
         usuarioRepository.save(usuario);
 
-        // Login automatico despues de registrarse: generamos el JWT y lo mandamos en cookie
         String token = jwtService.generateToken(usuario);
         cookieUtil.crearCookieJwt(response, token, jwtService.getExpirationMs());
 
         return ResponseEntity.ok(UsuarioResponse.fromEntity(usuario));
     }
 
-    @Operation(summary = "Iniciar sesión",
-            description = "Verifica credenciales y setea la cookie httpOnly del JWT. Empieza por aquí para probar rutas protegidas.")
+    @Operation(summary = "Iniciar sesión", description = "Verifica credenciales y setea la cookie httpOnly del JWT. Empieza por aquí para probar rutas protegidas.")
     @PostMapping("/login")
     public ResponseEntity<UsuarioResponse> login(@Valid @RequestBody LoginRequest request,
                                                    HttpServletResponse response) {

@@ -1,6 +1,6 @@
 package com.natymoo.backend.service;
 
-import com.natymoo.backend.dto.UsersRequest;
+import com.natymoo.backend.dto.UsuarioRequest;
 import com.natymoo.backend.entity.Rol;
 import com.natymoo.backend.entity.Usuario;
 import com.natymoo.backend.exception.ResourceNotFoundException;
@@ -22,16 +22,18 @@ public class UsuarioService {
     private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Usuario findById(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontro usuario con id: " + id));
     }
 
-    public Usuario create(UsersRequest usersRequest) {
+    public Usuario create(UsuarioRequest usersRequest) {
         Rol rol = rolRepository.findById(1L)
                 .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado com id: 1"));
 
@@ -47,13 +49,13 @@ public class UsuarioService {
         return usuarioRepository.save(users);
     }
 
-    public Usuario update(Long id, UsersRequest usersRequest) {
+    public Usuario update(Long id, UsuarioRequest usersRequest) {
         Usuario usuarioExistente = findById(id);
 
         usuarioExistente.setNombre(usersRequest.getNombre());
         usuarioExistente.setApellido(usersRequest.getApellido());
         usuarioExistente.setEmail(usersRequest.getEmail());
-        usuarioExistente.setTelefono(usuarioExistente.getTelefono());
+        usuarioExistente.setTelefono(usersRequest.getTelefono());
 
         if (usersRequest.getPassword() != null && !usersRequest.getPassword().isBlank()){
             usuarioExistente.setPasswordHash(passwordEncoder.encode(usersRequest.getPassword()));
