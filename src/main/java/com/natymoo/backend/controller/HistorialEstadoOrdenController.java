@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.HistorialEstadoOrdenRequest;
 import com.natymoo.backend.entity.HistorialEstadoOrden;
 import com.natymoo.backend.service.HistorialEstadoOrdenService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para historial de estado de orden.
- * GET    /api/historial-estado-orden       -> listar todos
- * GET    /api/historial-estado-orden/{id} -> obtener uno
- * POST   /api/historial-estado-orden       -> crear
- * PUT    /api/historial-estado-orden/{id} -> actualizar
- * DELETE /api/historial-estado-orden/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/historial-estado-orden")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class HistorialEstadoOrdenController {
     }
 
     @PostMapping
-    public ResponseEntity<HistorialEstadoOrden> crear(@Valid @RequestBody HistorialEstadoOrden entidad) {
-        HistorialEstadoOrden creado = service.create(entidad);
+    public ResponseEntity<HistorialEstadoOrden> crear(@Valid @RequestBody HistorialEstadoOrdenRequest historialEstadoOrdenRequest) {
+        HistorialEstadoOrden creado = service.create(historialEstadoOrdenRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HistorialEstadoOrden> actualizar(@PathVariable Long id, @Valid @RequestBody HistorialEstadoOrden entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<HistorialEstadoOrden> actualizar(@PathVariable Long id, @Valid @RequestBody HistorialEstadoOrdenRequest historialEstadoOrdenRequest) {
+        return ResponseEntity.ok(service.update(id, historialEstadoOrdenRequest));
     }
 
     @DeleteMapping("/{id}")
