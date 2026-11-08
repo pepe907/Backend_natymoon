@@ -73,7 +73,7 @@ public class Usuario implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.getNombre()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.getDescripcion()));
     }
 
     @Override
