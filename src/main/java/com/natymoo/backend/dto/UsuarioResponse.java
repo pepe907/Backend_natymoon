@@ -26,7 +26,7 @@ public class UsuarioResponse {
                 .apellido(usuario.getApellido())
                 .email(usuario.getEmail())
                 .telefono(usuario.getTelefono())
-                .rol(usuario.getRol().getNombre())
+                .rol(usuario.getRol().getDescripcion())
                 .activo(usuario.getActivo())
                 .build();
     }
