@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.ProductoRequest;
 import com.natymoo.backend.entity.Producto;
 import com.natymoo.backend.service.ProductoService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para producto.
- * GET    /api/productos       -> listar todos
- * GET    /api/productos/{id} -> obtener uno
- * POST   /api/productos       -> crear
- * PUT    /api/productos/{id} -> actualizar
- * DELETE /api/productos/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/productos")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<Producto> crear(@Valid @RequestBody Producto entidad) {
-        Producto creado = service.create(entidad);
+    public ResponseEntity<Producto> crear(@Valid @RequestBody ProductoRequest productoRequest) {
+        Producto creado = service.create(productoRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @Valid @RequestBody Producto entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @Valid @RequestBody ProductoRequest productoRequest) {
+        return ResponseEntity.ok(service.update(id, productoRequest));
     }
 
     @DeleteMapping("/{id}")
