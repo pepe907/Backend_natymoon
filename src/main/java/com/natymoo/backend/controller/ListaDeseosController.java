@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.ListaDeseosRequest;
 import com.natymoo.backend.entity.ListaDeseos;
 import com.natymoo.backend.service.ListaDeseosService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para lista de deseos.
- * GET    /api/lista-deseos       -> listar todos
- * GET    /api/lista-deseos/{id} -> obtener uno
- * POST   /api/lista-deseos       -> crear
- * PUT    /api/lista-deseos/{id} -> actualizar
- * DELETE /api/lista-deseos/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/lista-deseos")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class ListaDeseosController {
     }
 
     @PostMapping
-    public ResponseEntity<ListaDeseos> crear(@Valid @RequestBody ListaDeseos entidad) {
-        ListaDeseos creado = service.create(entidad);
+    public ResponseEntity<ListaDeseos> crear(@Valid @RequestBody ListaDeseosRequest listaDeseosRequest) {
+        ListaDeseos creado = service.create(listaDeseosRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ListaDeseos> actualizar(@PathVariable Long id, @Valid @RequestBody ListaDeseos entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<ListaDeseos> actualizar(@PathVariable Long id, @Valid @RequestBody ListaDeseosRequest listaDeseosRequest) {
+        return ResponseEntity.ok(service.update(id, listaDeseosRequest));
     }
 
     @DeleteMapping("/{id}")
