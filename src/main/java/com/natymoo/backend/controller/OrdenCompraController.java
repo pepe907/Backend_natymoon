@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.OrdenCompraRequest;
 import com.natymoo.backend.entity.OrdenCompra;
 import com.natymoo.backend.service.OrdenCompraService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para orden de compra.
- * GET    /api/ordenes-compra       -> listar todos
- * GET    /api/ordenes-compra/{id} -> obtener uno
- * POST   /api/ordenes-compra       -> crear
- * PUT    /api/ordenes-compra/{id} -> actualizar
- * DELETE /api/ordenes-compra/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/ordenes-compra")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class OrdenCompraController {
     }
 
     @PostMapping
-    public ResponseEntity<OrdenCompra> crear(@Valid @RequestBody OrdenCompra entidad) {
-        OrdenCompra creado = service.create(entidad);
+    public ResponseEntity<OrdenCompra> crear(@Valid @RequestBody OrdenCompraRequest ordenCompraRequest) {
+        OrdenCompra creado = service.create(ordenCompraRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrdenCompra> actualizar(@PathVariable Long id, @Valid @RequestBody OrdenCompra entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<OrdenCompra> actualizar(@PathVariable Long id, @Valid @RequestBody OrdenCompraRequest ordenCompraRequest) {
+        return ResponseEntity.ok(service.update(id, ordenCompraRequest));
     }
 
     @DeleteMapping("/{id}")
