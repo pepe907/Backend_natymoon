@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.ImagenProductoRequest;
 import com.natymoo.backend.entity.ImagenProducto;
 import com.natymoo.backend.service.ImagenProductoService;
 import jakarta.validation.Valid;
@@ -11,14 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para imagen de producto.
- * GET    /api/imagenes-producto       -> listar todos
- * GET    /api/imagenes-producto/{id} -> obtener uno
- * POST   /api/imagenes-producto       -> crear
- * PUT    /api/imagenes-producto/{id} -> actualizar
- * DELETE /api/imagenes-producto/{id} -> eliminar
- */
 @RestController
 @RequestMapping("/api/imagenes-producto")
 @RequiredArgsConstructor
@@ -38,14 +31,14 @@ public class ImagenProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<ImagenProducto> crear(@Valid @RequestBody ImagenProducto entidad) {
-        ImagenProducto creado = service.create(entidad);
+    public ResponseEntity<ImagenProducto> crear(@Valid @RequestBody ImagenProductoRequest imagenProductoRequest) {
+        ImagenProducto creado = service.create(imagenProductoRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ImagenProducto> actualizar(@PathVariable Long id, @Valid @RequestBody ImagenProducto entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<ImagenProducto> actualizar(@PathVariable Long id, @Valid @RequestBody ImagenProductoRequest imagenProductoRequest) {
+        return ResponseEntity.ok(service.update(id, imagenProductoRequest));
     }
 
     @DeleteMapping("/{id}")
