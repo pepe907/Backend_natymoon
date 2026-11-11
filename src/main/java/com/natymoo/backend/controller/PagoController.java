@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.PagoRequest;
 import com.natymoo.backend.entity.Pago;
 import com.natymoo.backend.service.PagoService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para pago.
- * GET    /api/pagos       -> listar todos
- * GET    /api/pagos/{id} -> obtener uno
- * POST   /api/pagos       -> crear
- * PUT    /api/pagos/{id} -> actualizar
- * DELETE /api/pagos/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/pagos")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class PagoController {
     }
 
     @PostMapping
-    public ResponseEntity<Pago> crear(@Valid @RequestBody Pago entidad) {
-        Pago creado = service.create(entidad);
+    public ResponseEntity<Pago> crear(@Valid @RequestBody PagoRequest pagoRequest) {
+        Pago creado = service.create(pagoRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pago> actualizar(@PathVariable Long id, @Valid @RequestBody Pago entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<Pago> actualizar(@PathVariable Long id, @Valid @RequestBody PagoRequest pagoRequest) {
+        return ResponseEntity.ok(service.update(id, pagoRequest));
     }
 
     @DeleteMapping("/{id}")
