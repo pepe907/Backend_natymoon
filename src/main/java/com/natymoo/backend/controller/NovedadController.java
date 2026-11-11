@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.NovedadRequest;
 import com.natymoo.backend.entity.Novedad;
 import com.natymoo.backend.service.NovedadService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para novedades (reportes de incidencias de los usuarios).
- * GET    /api/novedades       -> listar todas
- * GET    /api/novedades/{id}  -> obtener una
- * POST   /api/novedades       -> crear (cualquier usuario autenticado)
- * PUT    /api/novedades/{id}  -> actualizar (admin/empleado cambia estado y respuesta)
- * DELETE /api/novedades/{id}  -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/novedades")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class NovedadController {
     }
 
     @PostMapping
-    public ResponseEntity<Novedad> crear(@Valid @RequestBody Novedad novedad) {
-        Novedad creada = service.create(novedad);
+    public ResponseEntity<Novedad> crear(@Valid @RequestBody NovedadRequest novedadRequest) {
+        Novedad creada = service.create(novedadRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Novedad> actualizar(@PathVariable Long id, @Valid @RequestBody Novedad novedad) {
-        return ResponseEntity.ok(service.update(id, novedad));
+    public ResponseEntity<Novedad> actualizar(@PathVariable Long id, @Valid @RequestBody NovedadRequest novedadRequest) {
+        return ResponseEntity.ok(service.update(id, novedadRequest));
     }
 
     @DeleteMapping("/{id}")
