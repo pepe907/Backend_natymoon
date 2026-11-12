@@ -1,6 +1,5 @@
 package com.natymoo.backend.dto;
 
-import com.natymoo.backend.entity.OrdenCompra;
 import lombok.Data;
 
 import java.math.BigDecimal;
