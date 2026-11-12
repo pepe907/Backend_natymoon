@@ -81,8 +81,4 @@ public class DireccionUsuarioService {
         }
         repository.deleteById(id);
     }
-
-    private void copiarCampos(DireccionUsuario existente, DireccionUsuario nuevo) {
-        org.springframework.beans.BeanUtils.copyProperties(nuevo, existente, "id", "fechaCreacion");
-    }
 }
