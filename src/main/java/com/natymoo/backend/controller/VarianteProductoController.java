@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.VarianteProductoRequest;
 import com.natymoo.backend.entity.VarianteProducto;
 import com.natymoo.backend.service.VarianteProductoService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para variante de producto.
- * GET    /api/variantes-producto       -> listar todos
- * GET    /api/variantes-producto/{id} -> obtener uno
- * POST   /api/variantes-producto       -> crear
- * PUT    /api/variantes-producto/{id} -> actualizar
- * DELETE /api/variantes-producto/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/variantes-producto")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class VarianteProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<VarianteProducto> crear(@Valid @RequestBody VarianteProducto entidad) {
-        VarianteProducto creado = service.create(entidad);
+    public ResponseEntity<VarianteProducto> crear(@Valid @RequestBody VarianteProductoRequest varianteProductoRequest) {
+        VarianteProducto creado = service.create(varianteProductoRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VarianteProducto> actualizar(@PathVariable Long id, @Valid @RequestBody VarianteProducto entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<VarianteProducto> actualizar(@PathVariable Long id, @Valid @RequestBody VarianteProductoRequest varianteProductoRequest) {
+        return ResponseEntity.ok(service.update(id, varianteProductoRequest));
     }
 
     @DeleteMapping("/{id}")
