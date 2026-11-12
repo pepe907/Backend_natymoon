@@ -56,30 +56,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // usamos JWT en cookie httpOnly, no sesiones con formularios
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Rutas publicas
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
-                        // Documentacion Swagger/OpenAPI: publica, para poder ver la API sin login
-                        // (las llamadas reales que se hagan desde el "Try it out" si respetan
-                        // la seguridad normal de cada endpoint).
+
+                        // Documentacion Swagger/OpenAPI
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
-                        // Lectura de catalogo publica (ver productos sin login).
-                        // IMPORTANTE: se usa el enum HttpMethod.GET (no el texto "GET") para que
-                        // Spring realmente filtre por metodo. Con el texto entre comillas, Java
-                        // llama a otra version de requestMatchers() que ignora el metodo y termina
-                        // aplicando la regla a TODOS los metodos -- ese era el bug que abria
-                        // POST/DELETE sin login y bloqueaba el POST normal de los clientes.
+
+                        // Lectura de catalogo publica (GET)
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categorias/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/variantes-producto/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/imagenes-producto/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/resenas-producto/**").permitAll()
-                        // Solo ADMIN puede gestionar roles, usuarios y catalogo (crear/editar/borrar)
+
+                        // Solo ADMIN puede gestionar roles, usuarios y configuraciones críticas
                         .requestMatchers("/api/roles/**").hasRole("ADMIN")
                         .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
@@ -88,36 +84,24 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/variantes-producto/**").hasRole("ADMIN")
-                        // Cupones: crear/editar/borrar es solo de ADMIN, pero CONSULTARLOS (GET)
-                        // tiene que quedar abierto a cualquier autenticado, porque el checkout
-                        // del cliente necesita poder leer la lista para validar el codigo que
-                        // escribe.
                         .requestMatchers(HttpMethod.POST, "/api/cupones/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/cupones/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/cupones/**").hasRole("ADMIN")
-                        // ADMIN y EMPLEADO gestionan operacion diaria: editar productos,
-                        // cambiar estado de pedidos y resolver novedades
+
+                        // Empleado y Admin (Gestión operativa y catálogos)
                         .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasAnyRole("ADMIN", "EMPLEADO")
                         .requestMatchers(HttpMethod.POST, "/api/variantes-producto/**").hasAnyRole("ADMIN", "EMPLEADO")
+                        .requestMatchers(HttpMethod.PUT, "/api/variantes-producto/**").hasAnyRole("ADMIN", "EMPLEADO")
+
                         .requestMatchers(HttpMethod.PUT, "/api/ordenes-compra/**").hasAnyRole("ADMIN", "EMPLEADO")
                         .requestMatchers(HttpMethod.PUT, "/api/novedades/**").hasAnyRole("ADMIN", "EMPLEADO")
                         .requestMatchers(HttpMethod.DELETE, "/api/novedades/**").hasRole("ADMIN")
-                        // Cambiar el ESTADO de un pago (aprobar/rechazar) es cosa de staff,
-                        // pero CREAR el pago (POST) lo hace el propio cliente al pagar en el checkout
                         .requestMatchers(HttpMethod.PUT, "/api/pagos/**").hasAnyRole("ADMIN", "EMPLEADO")
-                        .requestMatchers(HttpMethod.DELETE, "/api/pagos/**").hasAnyRole("ADMIN", "EMPLEADO")
-                        // El historial de la orden tambien lo crea el cliente al confirmar su compra
+                        .requestMatchers(HttpMethod.DELETE, "/api/pagos/**").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.PUT, "/api/historial-estado-orden/**").hasAnyRole("ADMIN", "EMPLEADO")
                         .requestMatchers(HttpMethod.DELETE, "/api/historial-estado-orden/**").hasAnyRole("ADMIN", "EMPLEADO")
-                        // PUT sobre variantes-producto queda abierto a cualquier autenticado:
-                        // el propio cliente lo usa para descontar el stock al confirmar su compra.
-                        // DELETE de variantes si queda exclusivo de ADMIN (regla de arriba).
-                        //
-                        // Todo lo demas requiere estar autenticado, sin restriccion de rol.
-                        // Aqui caen, para cualquier usuario logueado: POST de ordenes-compra,
-                        // detalle-orden, pagos, historial-estado-orden, novedades, direcciones-usuario,
-                        // carritos-compra, detalle-carrito, lista-deseos, resenas-producto (crear),
-                        // y GET de cupones, ordenes-compra, pagos, etc.
+
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -132,7 +116,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // necesario para que el navegador envie la cookie
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
