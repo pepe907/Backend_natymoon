@@ -1,5 +1,6 @@
 package com.natymoo.backend.controller;
 
+import com.natymoo.backend.dto.ResenaProductoRequest;
 import com.natymoo.backend.entity.ResenaProducto;
 import com.natymoo.backend.service.ResenaProductoService;
 import jakarta.validation.Valid;
@@ -11,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * CRUD completo para resena de producto.
- * GET    /api/resenas-producto       -> listar todos
- * GET    /api/resenas-producto/{id} -> obtener uno
- * POST   /api/resenas-producto       -> crear
- * PUT    /api/resenas-producto/{id} -> actualizar
- * DELETE /api/resenas-producto/{id} -> eliminar
- */
+
 @RestController
 @RequestMapping("/api/resenas-producto")
 @RequiredArgsConstructor
@@ -38,14 +32,14 @@ public class ResenaProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<ResenaProducto> crear(@Valid @RequestBody ResenaProducto entidad) {
-        ResenaProducto creado = service.create(entidad);
+    public ResponseEntity<ResenaProducto> crear(@Valid @RequestBody ResenaProductoRequest resenaProductoRequest) {
+        ResenaProducto creado = service.create(resenaProductoRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResenaProducto> actualizar(@PathVariable Long id, @Valid @RequestBody ResenaProducto entidad) {
-        return ResponseEntity.ok(service.update(id, entidad));
+    public ResponseEntity<ResenaProducto> actualizar(@PathVariable Long id, @Valid @RequestBody ResenaProductoRequest resenaProductoRequest) {
+        return ResponseEntity.ok(service.update(id, resenaProductoRequest));
     }
 
     @DeleteMapping("/{id}")
