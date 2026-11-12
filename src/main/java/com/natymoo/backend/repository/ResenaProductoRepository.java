@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ResenaProductoRepository extends JpaRepository<ResenaProducto, Long> {
     List<ResenaProducto> findByProductoId(Long productoId);
+    boolean existsByProductoIdAndUsuarioId(Long productoId, Long usuarioId);
 }
